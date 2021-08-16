@@ -1,0 +1,30 @@
+remote:
+  client:
+    accessKey: 65ad5dc0abce1c40b8a7f144f03efa60
+    url: http://localhost:${wiremock.server.port}
+
+
+batch:
+  threadPool:
+    coreSize: 10
+    maxSize: 50
+  chunkSize: 100
+  datasource:
+    url: jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;INIT= CREATE SCHEMA IF NOT EXISTS COMPANY
+    username: sa
+    password: sa
+    driverClassName: org.h2.Driver
+    dialect: org.hibernate.dialect.H2Dialect
+    poolName: BatchDataBasePool
+    showSql: true
+    timeZone: UTC
+    hbm2ddl: create
+    maxPoolSize: 5
+    minIdlePoolSize: 2
+
+spring:
+  batch:
+    job:
+      enabled: false
+    jdbc:
+      table-prefix: CM_BATCH_

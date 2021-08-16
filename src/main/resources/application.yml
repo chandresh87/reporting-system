@@ -1,0 +1,34 @@
+remote:
+  client:
+    accessKey:
+    url: http://api.exchangeratesapi.io
+
+
+batch:
+  threadPool:
+    coreSize: 10
+    maxSize: 50
+  chunkSize: 100
+  datasource:
+    url: jdbc:mysql://localhost:3306/company?allowPublicKeyRetrieval=true&useSSL=false
+    username: root
+    password:
+    driverClassName: com.mysql.jdbc.Driver
+    dialect: org.hibernate.dialect.MySQL5Dialect
+    poolName: BatchDataBasePool
+    showSql: true
+    timeZone: UTC
+    hbm2ddl: none
+    maxPoolSize: 5
+    minIdlePoolSize: 2
+
+spring:
+  batch:
+    job:
+      enabled: false
+    jdbc:
+      initialize-schema: never
+
+report:
+  file:
+    location: D:\Data\report
