@@ -8,7 +8,7 @@ batch:
   threadPool:
     coreSize: 10
     maxSize: 50
-  chunkSize: 100
+  chunkSize: 50
   datasource:
     url: jdbc:mysql://localhost:3306/company?allowPublicKeyRetrieval=true&useSSL=false
     username: root

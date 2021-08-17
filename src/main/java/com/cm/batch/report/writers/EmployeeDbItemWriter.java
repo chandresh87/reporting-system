@@ -33,7 +33,7 @@ public class EmployeeDbItemWriter implements ItemWriter<DepartmentDataBO>, StepE
   }
 
   @Override
-  public void write(List<? extends DepartmentDataBO> items) throws Exception {
+  public void write(List<? extends DepartmentDataBO> items) {
     Map<String, BigDecimal> totalCostSumMap =
         items.stream()
             .collect(
@@ -43,14 +43,25 @@ public class EmployeeDbItemWriter implements ItemWriter<DepartmentDataBO>, StepE
                         BigDecimal.ZERO, DepartmentDataBO::getTotalCost, BigDecimal::add)));
 
     totalCostSumMap.forEach(
-        (deptName, bigDecimal) -> {
+        (deptName, cost) -> {
           log.info(
               "Writing to stepExecution {} {} {} {}",
               deptName,
-              bigDecimal,
+              cost,
               stepExecution,
               stepExecution.getExecutionContext().entrySet());
-          stepExecution.getExecutionContext().put(deptName, bigDecimal);
+          getAndSetStepExecution(deptName, cost);
         });
+  }
+
+  private void getAndSetStepExecution(String deptName, BigDecimal cost) {
+    Object costFromPreviousIteration = stepExecution.getExecutionContext().get(deptName);
+    if (null != costFromPreviousIteration) {
+      BigDecimal costTemp = (BigDecimal) costFromPreviousIteration;
+
+      stepExecution.getExecutionContext().put(deptName, costTemp.add(cost));
+    } else {
+      stepExecution.getExecutionContext().put(deptName, cost);
+    }
   }
 }
