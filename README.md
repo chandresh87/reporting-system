@@ -37,7 +37,7 @@ We need a process that on a daily basis, takes the data from the table and produ
 
 	1. gradle clean build
 	2. cd  \reporting-system\build\libs
-	3. java -jar report-0.0.1-SNAPSHOT.jar
+	3. java -jar -Dremote.client.accessKey="" -Dbatch.datasource.password="" report-0.0.1-SNAPSHOT.jar
 	4. Hit GET http://localhost:8080/run/{baseCurrency}
 
 ## Explanation
