@@ -46,7 +46,7 @@ We have used Spring Batch heavily to solve this problem.
 
 ### Flow
 
-External rest trigger starts the batch job. Job consist of Master/partitioner step and a Follower/Worker Step.
+External rest trigger starts the batch job. The job consist of a Master/partitioner step and a Follower/Worker Step.
 
 
 ```
@@ -61,8 +61,8 @@ public Step masterStep(PartitionHandler partitionHandler) {
 ```
 
 
-* The Master step runs first which is configured with the custom database partitioner , a partition Handler & aggregator.
-* Database partitioner calls a database to fetch the unique department name and set that in execution context.
+* The Master step runs first which is configured with the custom database partitioner, a partition Handler & aggregator.
+* Database partitioner calls a database to fetch the unique department name and set that in the execution context.
 
 ```
  public PartitionHandler partitionHandler(@Qualifier("readDatabaseStep") Step readDatabaseStep) {
@@ -74,7 +74,7 @@ public Step masterStep(PartitionHandler partitionHandler) {
   }
 ```
 * TaskExecutorPartitionHandler implementation of PartitionHandler has been used here.
-* TaskExecutorPartitionHandler starts N number of thread and each thread runs 'read-employee-data-step' in parallel.
+* TaskExecutorPartitionHandler starts N number of threads and each thread runs 'read-employee-data-step' in parallel.
 
 ```
  public Step readDatabaseStep(@Value("${batch.chunkSize}") int chunkSize) {
@@ -97,7 +97,7 @@ SELECT new com.cm.batch.report.repositories.DepartmentDTO(e.department, SUM(e.co
 * This remote call is cached in memory.
 * At the end of the read-employee-data-step, it writes data the sum of data for a given department in a step context.
 * when all the partitioned steps get completed, Step Execution Aggregator has been called.
-* Step Execution Aggregator iterate over the partitioned step context and create a list of ReportModel & set that in Job execution context.
+* Step Execution Aggregator iterate over the partitioned step context and create a list of ReportModel & set that in the job execution context.
 
 ```
 public class ReportModel {
@@ -107,7 +107,7 @@ private String baseCurrency;
 }
 ```
 
-* At the end job, Job listener has been called which fetches the list of ReportModel from Job execution context & pass that to PDF generator.
+* At the end job, Job listener has been called which fetches the list of ReportModel from Job execution context & pass that to the PDF generator.
 * PDF generator creates a PDF file having department cost data.
 
   ![Alt text](report_file.jpg?raw=true)
