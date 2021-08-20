@@ -7,8 +7,10 @@ import org.springframework.batch.core.JobExecutionListener;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
+import org.springframework.batch.core.partition.PartitionHandler;
 import org.springframework.batch.core.partition.support.Partitioner;
 import org.springframework.batch.core.partition.support.StepExecutionAggregator;
+import org.springframework.batch.core.partition.support.TaskExecutorPartitionHandler;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.data.RepositoryItemReader;
 import org.springframework.batch.item.support.CompositeItemProcessor;
@@ -69,13 +71,11 @@ public class JobConfiguration {
   }
 
   @Bean
-  public Step masterStep(@Qualifier("readDatabaseStep") Step readDatabaseStep) {
+  public Step masterStep(PartitionHandler partitionHandler) {
     return stepBuilderFactory
         .get("partition-step")
         .partitioner("read-employee-data-step", partitioner)
-        .step(readDatabaseStep)
-        .gridSize(databaseProperty.getMaxPoolSize())
-        .taskExecutor(taskExecutor)
+        .partitionHandler(partitionHandler)
         .aggregator(stepExecutionAggregator)
         .build();
   }
@@ -83,5 +83,14 @@ public class JobConfiguration {
   @Bean
   public Job job(@Qualifier("masterStep") Step masterStep) {
     return jobBuilderFactory.get("reporting-job").start(masterStep).listener(jobListener).build();
+  }
+
+  @Bean
+  public PartitionHandler partitionHandler(@Qualifier("readDatabaseStep") Step readDatabaseStep) {
+    TaskExecutorPartitionHandler taskExecutorPartitionHandler = new TaskExecutorPartitionHandler();
+    taskExecutorPartitionHandler.setTaskExecutor(taskExecutor);
+    taskExecutorPartitionHandler.setStep(readDatabaseStep);
+    taskExecutorPartitionHandler.setGridSize(databaseProperty.getMaxPoolSize());
+    return taskExecutorPartitionHandler;
   }
 }
