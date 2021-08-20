@@ -15,11 +15,11 @@ We have a table in an upstream database containing our employee labour costs. Ou
 |  07397 |  Associate | Administration  |  700 | USD  |
 |  42954 | Manager  | Administration  |  1000 |  USD |
 
-#Reporting requirements
+# Reporting requirements
 
 We need a process that on a daily basis, takes the data from the table and produces a grand total of current labour costs per department. It needs to produce an output file which will be delivered to a downstream accounting system. The file should contain one row per department, with each row having the department name and the total current labour costs for that department. 
 
-#Design
+# Design
 
 ![Alt text](report-system-diagram.jpg?raw=true)
 
