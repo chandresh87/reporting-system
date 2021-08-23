@@ -115,5 +115,5 @@ private String baseCurrency;
 # Further Improvement
  In place of TaskExecutorPartitionHandler, we can use MessageChannelPartitionHandler or a DeployerPartitionHandler.
 
-MessageChannelPartitionHandler - It runs the worker step outside the master step and communicate via message channel.
-DeployerPartitionHandler - Launches the worker on at the runtime.
+* MessageChannelPartitionHandler - It runs the worker step outside the master step and communicate via message channel.
+* DeployerPartitionHandler - Launches the worker  at the runtime.
