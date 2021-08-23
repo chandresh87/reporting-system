@@ -18,6 +18,7 @@ public class BatchTaskExecutor {
     executor.setCorePoolSize(coreSize);
     executor.setMaxPoolSize(maxSize);
     executor.setThreadNamePrefix("default_task_executor_thread");
+    executor.setDaemon(true);
     executor.initialize();
     return executor;
   }
