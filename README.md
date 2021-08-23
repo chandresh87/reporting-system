@@ -111,3 +111,9 @@ private String baseCurrency;
 * PDF generator creates a PDF file having department cost data.
 
   ![Alt text](report_file.jpg?raw=true)
+
+# Further Improvement
+ In place of TaskExecutorPartitionHandler, we can use MessageChannelPartitionHandler or a DeployerPartitionHandler.
+
+MessageChannelPartitionHandler - It runs the worker step outside the master step and communicate via message channel.
+DeployerPartitionHandler - Launches the worker on at the runtime.
